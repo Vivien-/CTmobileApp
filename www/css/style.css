@@ -1,1 +1,47 @@
 /* Empty. Add your own CSS if you like */
+.button {
+		overflow: visible !important;
+		transition: background-color 1000ms linear;
+}
+
+#train-display {
+		margin-top: 20px;
+		padding-top: 10px;
+		height: 50px;
+		white-space: nowrap;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 10px;
+}
+
+.best {
+		animation: fade 1200ms infinite !important;
+}
+
+#right {
+		float: right;
+		direction: rtl;
+}
+
+div span {
+		display: inline-block;
+		color: #4197BF;
+		position: relative;
+		width: 150px;
+		padding-top: 10px;
+		margin: 5px;
+}
+
+#left {
+		
+}
+
+@keyframes fade {
+    from {opacity: 1.0;}
+    50% {opacity: 0.4;}
+    to {opacity: 1.0;}
+}
+
+h1 {
+		color: #10729f !important;
+}
