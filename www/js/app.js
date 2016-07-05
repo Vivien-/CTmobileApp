@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'ngCordova'])
 		.config(function($stateProvider, $urlRouterProvider) {
 				$stateProvider
 						.state('home', {
@@ -16,7 +16,15 @@ angular.module('starter', ['ionic'])
 						});
 				$urlRouterProvider.otherwise('/home');  
 		})
-		.controller('myCtrl', function($scope) {
+    .controller('mapCtrl', function($scope) {
+				var map;
+				map = new google.maps.Map(document.getElementById('map'), {
+						center: {lat: 44.8357953, lng: -0.5735781},
+						zoom: 14
+				});
+
+		})
+		.controller('myCtrl', function($scope, $interval) {
 				var colors = [];
 
 				function makeColorGradient() {
@@ -98,16 +106,14 @@ angular.module('starter', ['ionic'])
 						httpGetAsync("/datas_"+ (k%3) +".txt", drawInterface);
 						k++;
 				}
-
-
+				
+				
 				var button = document.getElementById("refresh");
 				button.addEventListener("click",function(e){
 						updateView();
 				},false);
-				setInterval('updateView()', 5000);
+				$interval(updateView, 5000);
 				updateView();
-
-
 		})
 		.run(function($ionicPlatform) {
 				$ionicPlatform.ready(function() {

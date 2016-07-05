@@ -1,5 +1,9 @@
 <ion-view view-title="Choose your itinerary">
   <ion-content class="padding">
+		<div style="height:55%;" ng-controller="mapCtrl">
+			<div id="map" data-tap-disabled="true"></div>
+		</div>
+
 		<div ng-controller="myCtrl">
 			<div class="button-bar" id="train-display"></div>
 			<span id="left" class="ion-arrow-left-c"></span>

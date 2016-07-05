@@ -45,3 +45,12 @@ div span {
 h1 {
 		color: #10729f !important;
 }
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.scroll {
+    height: 100%;
+}
