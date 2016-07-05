@@ -1,0 +1,14 @@
+{"context": 
+    {"name": "train", 
+     "left": "Arts et métiers", 
+     "right": "Hopital Haut Leveque"
+    }, 
+ "content": 
+ 		[{"occupation": 27, "id":"car-1"}, 
+     {"occupation": 18, "id":"car-2"},
+     {"occupation": 0, "id":"car-3"},
+     {"occupation": 0, "best": true, "id":"car-4"},
+     {"occupation": 11, "id":"car-5"},
+     {"occupation": 99, "id":"car-6"}
+	]
+}
