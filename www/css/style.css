@@ -54,3 +54,8 @@ h1 {
 .scroll {
     height: 100%;
 }
+
+.infospan {
+		padding-top: 0px;
+		margin: 0px;
+}

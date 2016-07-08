@@ -110,29 +110,37 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								label + "<br>" +
 								speedinfo +
 								'</div>'
-						console.log(infos);
 						return content;
 				}
 				
 				return {
+						markerTrams : [],
 						drawMarkersTrams: function(datas, style, map) {
+								for (var i = 0; i < this.markerTrams.length; i++) 
+										this.markerTrams[i].setMap(null);
+								this.markerTrams = [];
+								
 								for(var i = 0; i < datas.length; ++i) {
 										var positionLatLng = getLatLngTrams(datas[i]);
 										var contentString = getTramInformation(datas[i].SV_VEHIC_P);
 										
-										var infowindow = new google.maps.InfoWindow({
-												content: contentString
-										});
-
 										var marker = new google.maps.Marker({
 												position: positionLatLng,
 												map: map,
 												icon: {url: style, scaledSize: new google.maps.Size(40,40) }
 										});
 										
-										marker.addListener('click', function() {
-												infowindow.open(map, marker);
+										marker.info = new google.maps.InfoWindow({
+												content:  contentString
 										});
+										
+										google.maps.event.addListener(marker, 'click', function() {  
+												var marker_map = this.getMap();
+												this.info.open(marker_map, this);	// If you call open() without passing a marker (this), the InfoWindow position will suck.
+
+										});
+										
+										this.markerTrams.push(marker);
 								}
 						},
 						drawMarkersStops: function(datas, style, map) {
@@ -261,8 +269,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						return {q:str, line:$scope.currentChoice.line.id};
 				}
 		})
-    	.controller('mapCtrl', function($scope, $interval, getDatasService, drawInformations, choice) {
-    		console.log(choice);
+    .controller('mapCtrl', function($scope, $interval, getDatasService, drawInformations, choice) {
     		$scope.currentChoice = choice;
 				var _TRAM = $scope.currentChoice.line.id;
 				var _SENS = 'ALLER';
@@ -270,15 +277,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				
 				var icon_stop = "img/line-stop.png";
 				var icon_tram = "img/tram-marker-icon.png";
-				
+					
 				var map;
 				map = new google.maps.Map(document.getElementById('map'), {
 						center: {lat: 44.8357953, lng: -0.5735781},
 						zoom: 14
 				});
-
-				var promiseStops = getDatasService.getStops(_TRAM);
-				promiseStops.then(
+				
+				getDatasService.getStops(_TRAM).then(
 						function(answer) {
 								var ans = answer.data.ExecuteResponse.ProcessOutputs.Output;
 								drawInformations.drawMarkersStops(ans, icon_stop, map);
@@ -286,12 +292,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				
 				drawInformations.drawLines(_TRAM, map);
 				
-				var promiseTrams = getDatasService.getTrams(_TRAM);
-				promiseTrams.then(
+				getDatasService.getTrams(_TRAM).then(
 						function(answer) {
 								var ans = answer.data.FeatureCollection.featureMember;
 								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
-						});			
+						});
+				$interval(function() { 
+						getDatasService.getTrams(_TRAM).then(
+						function(answer) {
+								var ans = answer.data.FeatureCollection.featureMember;
+								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
+						});	
+				}, 5000);		
 		})
 		.controller('myCtrl', function($scope, $interval) {
 				var colors = [];
