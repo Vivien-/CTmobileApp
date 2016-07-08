@@ -47,8 +47,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 																		 return aftCnv;
 																 }});
 						},
-						getTrams: function(lineId) {
-								var filter = "%3CFilter%3E%3CAND%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3ERS_SV_LIGNE_A%3C%2FPropertyName%3E%3CLiteral%3E"+lineId+"%3C%2FLiteral%3E%3C%2FPropertyIsEqualTo%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3ESENS%3C%2FPropertyName%3E%3CLiteral%3EALLER%3C%2FLiteral%3E%3C%2FPropertyIsEqualTo%3E%3C%2FAND%3E%3C%2FFilter%3E";
+						getTrams: function(lineId, sens) {
+								var filter = "%3CFilter%3E%3CAND%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3ERS_SV_LIGNE_A%3C%2FPropertyName%3E%3CLiteral%3E"+lineId+"%3C%2FLiteral%3E%3C%2FPropertyIsEqualTo%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3ESENS%3C%2FPropertyName%3E%3CLiteral%3E"+sens+"%3C%2FLiteral%3E%3C%2FPropertyIsEqualTo%3E%3C%2FAND%3E%3C%2FFilter%3E";
 								return $http.get("http://data.bordeaux-metropole.fr/wfs?key="+_KEY+"&REQUEST=GetFeature&SERVICE=WFS&TYPENAME=SV_VEHIC_P&VERSION=1.1.0&Filter="+filter,
 																 {transformResponse: function (cnv) {
 																		 var x2js = new X2JS();
@@ -59,7 +59,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				}
 		})
 		.factory('drawInformations', function($http) {
-
 				function rgf93tomercator(point) {
 						var firstProjection = '+proj=lcc +lat_1=44.25 +lat_2=45.75 +lat_0=45 +lon_0=3 +x_0=1700000 +y_0=4200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs ';
 						var secondProjection = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
@@ -83,9 +82,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 
 				function getLabel(data) {
 						var lateTime = data.RETARD.__text;
-						var _text = "<span class='infospan' style='color:red;'> Late by " + lateTime + "s</span>";
+						var _text = "<span class='infospan' style='color:red;'> En retard de " + lateTime + "s</span>";
 						if(lateTime < 0) {
-								_text = "<span class='infospan' style='color:green;'> Ahead by " + Math.abs(lateTime) + "s</span>";
+								_text = "<span class='infospan' style='color:green;'> En avance de " + Math.abs(lateTime) + "s</span>";
 						}
 						return  _text;
 				}
@@ -104,7 +103,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						var label = getLabel(infos);
 						var nextStop = getNextStop(infos);
 						var speedinfo = getSpeedInfo(infos);
-						var content = '<div id="content">'+
+						var content = '<div class="info-div-tram">'+
 								'<h1 style="font-size: 20px; margin: 0;">Direction '+ infos.TERMINUS.__text +'</h1>'+
 								nextStop + "<br>" +
 								label + "<br>" +
@@ -116,8 +115,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				return {
 						markerTrams : [],
 						drawMarkersTrams: function(datas, style, map) {
-								for (var i = 0; i < this.markerTrams.length; i++) 
-										this.markerTrams[i].setMap(null);
+								var copyMarkerTrams = this.markerTrams;
 								this.markerTrams = [];
 								
 								for(var i = 0; i < datas.length; ++i) {
@@ -142,15 +140,33 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										
 										this.markerTrams.push(marker);
 								}
+								for (var i = 0; i < copyMarkerTrams.length; i++) 
+										copyMarkerTrams[i].setMap(null);
 						},
 						drawMarkersStops: function(datas, style, map) {
 								for(var i = 0; i < datas.length; ++i) {
 										var positionLatLng = getLatLngStops(datas[i]);
-										new google.maps.Marker({
+										console.log(datas[i].Data.ComplexData.featureMember.SV_ARRET_P);
+										var contentString = '<div class="info-div-stop">'+
+												'<h1 style="font-size: 20px; margin: 0;">Station '+ datas[i].Data.ComplexData.featureMember.SV_ARRET_P.LIBELLE.__text +'</h1>'+
+												'</div>';
+										
+										var marker = new google.maps.Marker({
 												position: positionLatLng,
 												map: map,
 												icon: {url: style, anchor: new google.maps.Point(10,10), scaledSize: new google.maps.Size(20,20)}
 										});
+
+										marker.info = new google.maps.InfoWindow({
+												content:  contentString
+										});
+										
+										google.maps.event.addListener(marker, 'click', function() {  
+												var marker_map = this.getMap();
+												this.info.open(marker_map, this);	// If you call open() without passing a marker (this), the InfoWindow position will suck.
+
+										});
+
 								}
 						},
 						drawLines: function(lineId, map) {
@@ -272,7 +288,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
     .controller('mapCtrl', function($scope, $interval, getDatasService, drawInformations, choice) {
     		$scope.currentChoice = choice;
 				var _TRAM = $scope.currentChoice.line.id;
-				var _SENS = 'ALLER';
+				var _SENS = $scope.currentChoice.direction.id == 1 ? 'ALLER' : 'RETOUR';
 				var _STOP = 404;
 				
 				var icon_stop = "img/line-stop.png";
@@ -292,18 +308,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				
 				drawInformations.drawLines(_TRAM, map);
 				
-				getDatasService.getTrams(_TRAM).then(
+				getDatasService.getTrams(_TRAM, _SENS).then(
 						function(answer) {
 								var ans = answer.data.FeatureCollection.featureMember;
 								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
 						});
 				$interval(function() { 
-						getDatasService.getTrams(_TRAM).then(
+						getDatasService.getTrams(_TRAM, _SENS).then(
 						function(answer) {
 								var ans = answer.data.FeatureCollection.featureMember;
 								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
 						});	
-				}, 5000);		
+				}, 15000);		
 		})
 		.controller('myCtrl', function($scope, $interval) {
 				var colors = [];
