@@ -70,35 +70,66 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				}
 
 				function getLabel(data) {
-						var lateTime = data.SV_VEHIC_P.RETARD.__text;
-						var text = "Late by " + lateTime + "s";
-						if(lateTime < 0)
-								text = "Ahead by " + Math.abs(lateTime) + "s";
-						return text;
+						var lateTime = data.RETARD.__text;
+						var _text = "<span class='infospan' style='color:red;'> Late by " + lateTime + "s</span>";
+						if(lateTime < 0) {
+								_text = "<span class='infospan' style='color:green;'> Ahead by " + Math.abs(lateTime) + "s</span>";
+						}
+						return  _text;
 				}
 
+				function getNextStop(data) {
+						var nextStopId = data.RS_SV_ARRET_P_SUIV.__text;
+						return "<span class='infospan'>Prochain arret: " + nextStopId + "</span>";
+				}
+
+				function getSpeedInfo(data) {
+						var speed = data.VITESSE.__text;
+						return "<span class='infospan'>Vitesse: " + speed + "km/h</span>";
+				}
+				
+				function getTramInformation(infos) {
+						var label = getLabel(infos);
+						var nextStop = getNextStop(infos);
+						var speedinfo = getSpeedInfo(infos);
+						var content = '<div id="content">'+
+								'<h1 style="font-size: 20px; margin: 0;">Direction '+ infos.TERMINUS.__text +'</h1>'+
+								nextStop + "<br>" +
+								label + "<br>" +
+								speedinfo +
+								'</div>'
+						console.log(infos);
+						return content;
+				}
+				
 				return {
 						drawMarkersTrams: function(datas, style, map) {
 								for(var i = 0; i < datas.length; ++i) {
 										var positionLatLng = getLatLngTrams(datas[i]);
-										var label = getLabel(datas[i]);
-										new google.maps.Marker({
+										var contentString = getTramInformation(datas[i].SV_VEHIC_P);
+										
+										var infowindow = new google.maps.InfoWindow({
+												content: contentString
+										});
+
+										var marker = new google.maps.Marker({
 												position: positionLatLng,
 												map: map,
-												title: label
-												//												icon: style
+												icon: {url: style, scaledSize: new google.maps.Size(40,40) }
+										});
+										
+										marker.addListener('click', function() {
+												infowindow.open(map, marker);
 										});
 								}
 						},
 						drawMarkersStops: function(datas, style, map) {
 								for(var i = 0; i < datas.length; ++i) {
 										var positionLatLng = getLatLngStops(datas[i]);
-										//									var label = getLabel(datas[i]);
 										new google.maps.Marker({
 												position: positionLatLng,
 												map: map,
-												//												title: label,
-												icon: {url: style, anchor: new google.maps.Point(15,15)}
+												icon: {url: style, anchor: new google.maps.Point(10,10), scaledSize: new google.maps.Size(20,20)}
 										});
 								}
 						},
@@ -116,7 +147,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								}
 
 								var options = {
-										strokeColor: '#4285F4',
+										strokeColor: '#F2A00E',
 										strokeOpacity: 1.0,
 										strokeWeight: 3,
 										map: map
@@ -223,7 +254,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				var _STOP = 404;
 				
 				var icon_stop = "img/line-stop.png";
-				var icon_tram = "img/position_stop.png";
+				var icon_tram = "img/tram-marker-icon.png";
 				
 				var map;
 				map = new google.maps.Map(document.getElementById('map'), {
