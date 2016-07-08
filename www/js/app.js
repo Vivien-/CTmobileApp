@@ -16,6 +16,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						});
 				$urlRouterProvider.otherwise('/home');  
 		})
+		.factory('choice', function($rootScope) {
+			 var authorization = {};
+ 
+    		return {
+        		getAuthObject: function () {
+        	    return authorization;
+        	},
+        	setAuthObject: function (authObject) {
+            	authorization = authObject;
+        	}
+        	};
+		})
 		.factory('getDatasService', function($http) {
 				var _KEY = "8PVVD8CAA8";
 				return {
@@ -190,10 +202,11 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						}
 				};
 		})
-		.controller('homeCtrl', function($scope) {
-				$scope.line = null;
-				$scope.direction = null;
-				$scope.station = null;
+		.controller('homeCtrl', function($scope, choice) {
+				$scope.currentChoice = choice;
+				$scope.currentChoice.line = null;
+				$scope.currentChoice.direction = null;
+				$scope.currentChoice.station = null;
 				$scope.inputDirection = true;
 				$scope.inputStation = true;
 				$scope.cantSearch = true;
@@ -204,12 +217,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						$scope.inputDirection = true;
 						$scope.inputStation = true;
 						$scope.cantSearch = true;
-						$scope.line = null;
+						$scope.currentChoice.line = null;
 				}
 				
 				$scope.lineSelected = function(selected){
 						if(selected != undefined){
-								$scope.line = selected.originalObject;
+								$scope.currentChoice.line = selected.originalObject;
 								$scope.inputDirection = false;
 						}
 				}
@@ -218,38 +231,40 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						$scope.$broadcast('angucomplete-alt:clearInput', 's');
 						$scope.inputStation = true;
 						$scope.cantSearch = true;
-						$scope.direction = null;
+						$scope.currentChoice.direction = null;
 				}
 
 				$scope.directionSelected = function(selected){
 						if(selected != undefined){
 								$scope.inputStation = false;
-								$scope.direction = selected.originalObject;
+								$scope.currentChoice.direction = selected.originalObject;
 						}	
 				}
 				
 				$scope.resetStation = function(){
 						$scope.cantSearch = true;
-						$scope.station = null;
+						$scope.currentChoice.station = null;
 				}
 
 				$scope.stationSelected = function(selected){
 						if(selected != undefined){
 								$scope.cantSearch = false;
-								$scope.station = selected.originalObject;
+								$scope.currentChoice.station = selected.originalObject;
 						}
 				}
 
 				$scope.directionFormat = function(str){
-						return {q:str, line:$scope.line.id};
+						return {q:str, line:$scope.currentChoice.line.id};
 				}
 				
 				$scope.stationFormat = function(str){
-						return {q:str, line:$scope.line.id};
+						return {q:str, line:$scope.currentChoice.line.id};
 				}
 		})
-    .controller('mapCtrl', function($scope, $interval, getDatasService, drawInformations) {
-				var _TRAM = 60;
+    	.controller('mapCtrl', function($scope, $interval, getDatasService, drawInformations, choice) {
+    		console.log(choice);
+    		$scope.currentChoice = choice;
+				var _TRAM = $scope.currentChoice.line.id;
 				var _SENS = 'ALLER';
 				var _STOP = 404;
 				
@@ -386,4 +401,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						}
 				});
 		})
+		
+
 
