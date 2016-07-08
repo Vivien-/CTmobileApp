@@ -1,7 +1,7 @@
 {"context": 
     {"name": "train", 
-     "left": "Arts et métiers", 
-     "right": "Hopital Haut Leveque"
+     "left": "Pessac Centre", 
+     "right": "Citée du vin"
     }, 
  "content": 
  		[{"occupation": 97, "id":"car-1"}, 

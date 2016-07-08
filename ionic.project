@@ -1,4 +1,5 @@
 {
   "name": "ct",
-  "app_id": ""
+  "app_id": "",
+	"proxies": [{"path": "/data", "proxyUrl": "http://localhost:8080/data"}]
 }

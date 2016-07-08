@@ -1,25 +1,60 @@
-<ion-view view-title="Choose your itinerary">
+<ion-view view-title="Choose your itinerary" ng-controller="homeCtrl">
   <ion-content class="padding">
 		<div class="list list-inset">
       <label class="item  item-input item-stacked-label item-icon-right">
       	<i class="icon ion-merge"></i>
       	<span class="input-label">Line</span>
-      	<input type="text" placeholder="Tram B"></input>
-
+      	<angucomplete-alt id="l"
+              placeholder="Tram B"
+              pause="400"
+              selected-object="lineSelected"
+              remote-url="/data/lines?q="
+              remote-url-data-field="results"
+              title-field="name"
+              image-field="img"
+              minlength="1"
+              text-searching="Recherche de lignes ..."
+              input-changed="resetLine"
+              input-class="form-control form-control-small"
+              />
       </label>
       <label class="item  item-input item-stacked-label item-icon-right">
       	<i class="icon ion-navigate"></i>
       	<span class="input-label">Direction</span>
-      	<input type="text" placeholder="Pessac centre"></input>
+        <angucomplete-alt id="d"
+              placeholder="Pessac centre"
+              pause="400"
+              selected-object="directionSelected"
+              remote-url="/data/directions"
+              remote-url-request-formatter="directionFormat"
+              remote-url-data-field="results"
+              title-field="name"
+              minlength="1"
+              text-searching="Recherche de directions ..."
+              input-changed="resetDirection"
+              disable-input="inputDirection"
+              input-class="form-control form-control-small"
+              />
       </label>
       <label class="item  item-input item-stacked-label item-icon-right">
       	<i class="icon ion-location"></i>
       	<span class="input-label">Station</span>
-      	<input type="text" placeholder="Victoire"></input>
+        <angucomplete-alt id="s"
+              placeholder="Victoire"
+              pause="400"
+              selected-object="stationSelected"
+              remote-url="/data/stations"
+              remote-url-request-formatter="stationFormat"
+              remote-url-data-field="results"
+              title-field="name"
+              minlength="1"
+              text-searching="Recherche de stations ..."
+              input-changed="resetStation"
+              disable-input="inputStation"
+              input-class="form-control form-control-small"
+              />
       </label>
-			
-
-      <a class="button button-block button-outline button-positive " href="#/display">
+      <a class="button button-block button-outline button-positive " ng-disabled="cantSearch" href="#/display">
       	<i class="icon ion-search"></i>
       	Chercher
       </a>
