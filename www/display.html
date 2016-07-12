@@ -1,14 +1,23 @@
 <ion-view view-title="Choose your itinerary">
   <ion-content class="padding">
-		<div style="height:55%;" ng-controller="mapCtrl">
+		<div class="span-wrapper">
+			<a href="#/home"><i id="back-home" class="ion-android-arrow-back"></i></a>
+			<span id="left"></span>
+			<span id="refresh" class="ion-loop"></span>
+		</div>
+		<hr>
+		<div style="height:65%;" ng-controller="mapCtrl">
 			<div id="map" data-tap-disabled="true"></div>
 		</div>
 
 		<div ng-controller="myCtrl">
+			<div id="loaderWrapper">
+				<div class="loading outer">
+					<div class="loading inner"></div>
+				</div>
+			</div>
 			<div class="button-bar" id="train-display"></div>
-			<span id="left" class="ion-arrow-left-c"></span>
 			<span id="right" class="ion-arrow-right-c"></span>
 		</div>
-		<button id="refresh" class="button button-block button-outline button-positive">Refresh view</button>
 	</ion-content>
 </ion-view>

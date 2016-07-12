@@ -32,7 +32,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				var _KEY = "8PVVD8CAA8";
 				return {
 						getLine: function(id) {
-								return $http.get("http://data.bordeaux-metropole.fr/wps?key="+_KEY+"&service=WPS&version=1.0.0&request=Execute&Identifier=saeiv_troncons_sens&DataInputs=GID%3D" + id,
+								return $http.get("https://data.bordeaux-metropole.fr/wps?key="+_KEY+"&service=WPS&version=1.0.0&request=Execute&Identifier=saeiv_troncons_sens&DataInputs=GID%3D" + id,
 																 {transformResponse: function (cnv) {
 																		 var x2js = new X2JS();
 																		 var aftCnv = x2js.xml_str2json(cnv);
@@ -40,7 +40,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 																 }});
 						},
 						getStops: function(lineId) {
-								return $http.get("http://data.bordeaux-metropole.fr/wps?key="+_KEY+"&service=WPS&version=1.0.0&request=Execute&Identifier=saeiv_arrets_sens&DataInputs=GID%3D"+lineId,
+								return $http.get("https://data.bordeaux-metropole.fr/wps?key="+_KEY+"&service=WPS&version=1.0.0&request=Execute&Identifier=saeiv_arrets_sens&DataInputs=GID%3D"+lineId,
 																 {transformResponse: function (cnv) {
 																		 var x2js = new X2JS();
 																		 var aftCnv = x2js.xml_str2json(cnv);
@@ -49,7 +49,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						},
 						getTrams: function(lineId, sens) {
 								var filter = "%3CFilter%3E%3CAND%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3ERS_SV_LIGNE_A%3C%2FPropertyName%3E%3CLiteral%3E"+lineId+"%3C%2FLiteral%3E%3C%2FPropertyIsEqualTo%3E%3CPropertyIsEqualTo%3E%3CPropertyName%3ESENS%3C%2FPropertyName%3E%3CLiteral%3E"+sens+"%3C%2FLiteral%3E%3C%2FPropertyIsEqualTo%3E%3C%2FAND%3E%3C%2FFilter%3E";
-								return $http.get("http://data.bordeaux-metropole.fr/wfs?key="+_KEY+"&REQUEST=GetFeature&SERVICE=WFS&TYPENAME=SV_VEHIC_P&VERSION=1.1.0&Filter="+filter,
+								return $http.get("https://data.bordeaux-metropole.fr/wfs?key="+_KEY+"&REQUEST=GetFeature&SERVICE=WFS&TYPENAME=SV_VEHIC_P&VERSION=1.1.0&Filter="+filter,
 																 {transformResponse: function (cnv) {
 																		 var x2js = new X2JS();
 																		 var aftCnv = x2js.xml_str2json(cnv);
@@ -100,6 +100,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				}
 				
 				function getTramInformation(infos) {
+						var p = '<div class="button-bar"><span class="button" id="car-2" style="background-color: rgb(240, 195, 117);">68%</span><span class="button" id="car-1" style="background-color: rgb(240, 173, 117);">77%</span><span class="button" id="car-3" style="background-color: rgb(179, 240, 117);">25%</span><span class="button best" id="car-4" style="background-color: rgb(117, 240, 117);">0%</span><span class="button" id="car-5" style="background-color: rgb(146, 240, 117);">11%</span><span class="button" id="car-6" style="background-color: rgb(240, 218, 117);">59%</span></div>';
+						
 						var label = getLabel(infos);
 						var nextStop = getNextStop(infos);
 						var speedinfo = getSpeedInfo(infos);
@@ -107,7 +109,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								'<h1 style="font-size: 20px; margin: 0;">Direction '+ infos.TERMINUS.__text +'</h1>'+
 								nextStop + "<br>" +
 								label + "<br>" +
-								speedinfo +
+								speedinfo + "<br>" +
+								p + "<br>" +
 								'</div>'
 						return content;
 				}
@@ -146,15 +149,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						drawMarkersStops: function(datas, style, map) {
 								for(var i = 0; i < datas.length; ++i) {
 										var positionLatLng = getLatLngStops(datas[i]);
-										console.log(datas[i].Data.ComplexData.featureMember.SV_ARRET_P);
 										var contentString = '<div class="info-div-stop">'+
 												'<h1 style="font-size: 20px; margin: 0;">Station '+ datas[i].Data.ComplexData.featureMember.SV_ARRET_P.LIBELLE.__text +'</h1>'+
 												'</div>';
-										
+
 										var marker = new google.maps.Marker({
 												position: positionLatLng,
 												map: map,
-												icon: {url: style, anchor: new google.maps.Point(10,10), scaledSize: new google.maps.Size(20,20)}
+												icon: {url: style, anchor: new google.maps.Point(7,7), scaledSize: new google.maps.Size(14,14)}
 										});
 
 										marker.info = new google.maps.InfoWindow({
@@ -319,9 +321,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								var ans = answer.data.FeatureCollection.featureMember;
 								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
 						});	
-				}, 15000);		
+				}, 315000);		
 		})
-		.controller('myCtrl', function($scope, $interval) {
+		.controller('myCtrl', function($scope, $interval, $timeout) {
 				var colors = [];
 
 				function makeColorGradient() {
@@ -393,14 +395,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						if(!wrapperCreated)
 								createContext(context);
 						createCars(trainData);
+						document.getElementById("loaderWrapper").style.display = 'none';
+						document.getElementById("train-display").style.display = 'inline-flex';						
 				}
 
 				var wrapperCreated = false;
 
-
 				var k = 0;
 				function updateView() {
-						httpGetAsync("/datas_"+ (k%3) +".txt", drawInterface);
+						document.getElementById("train-display").style.display = 'none';
+						document.getElementById("loaderWrapper").style.display = 'block';
+						$timeout(function() { httpGetAsync("/datas_"+ (k%3) +".txt", drawInterface);}, 1500);
+
 						k++;
 				}
 				
@@ -409,7 +415,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				button.addEventListener("click",function(e){
 						updateView();
 				},false);
-				$interval(updateView, 5000);
+				$interval(updateView, 15000);
 				updateView();
 		})
 		.run(function($ionicPlatform) {

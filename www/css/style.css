@@ -12,6 +12,7 @@
 		margin-left: auto;
 		margin-right: auto;
 		margin-bottom: 10px;
+		overflow: visible;
 }
 
 .best {
@@ -23,17 +24,40 @@
 		direction: rtl;
 }
 
-div span {
-		display: inline-block;
-		color: #4197BF;
-		position: relative;
-		width: 150px;
-		padding-top: 10px;
-		margin: 5px;
+#left {
+		padding-top: 0;
+		color: #000;
+		display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
 }
 
-#left {
-		
+.span-wrapper {
+		display: table;
+}
+
+div span {
+		color: #4197BF;
+		position: relative;
+		width: 90%;
+		padding-top: 10px;
+}
+
+#back-home {
+		width: 0;
+		font-size: 45px;
+		color: grey;
+		cursor: pointer;
+}
+
+#refresh {
+		cursor: pointer;
+		font-size: 40px;
+		color: green;
+		float: right;
+		width: 0%;
+		padding-top: 0;
+		padding-right: 30px;
 }
 
 @keyframes fade {
@@ -73,4 +97,58 @@ h1 {
 		color: #10729F;
 		background-color: #F8F8F8;
 		font-weight: bold; 
+}
+
+
+.loading {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  padding: 0.5em;
+  vertical-align: middle;
+  text-align: center;
+  background-color: transparent;
+  border: 5px solid transparent;
+  border-top-color: #4197BF;
+  border-bottom-color: #4197BF;
+  border-radius: 50% 0;
+  box-shadow: 0 0 0.25em #4197BF inset;
+}
+
+.outer {
+  animation: spin 4s infinite linear;
+}
+
+.inner {
+  animation: spinR 2s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+@keyframes spinR {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(-360deg);
+  }
+}
+
+#loaderWrapper {
+		width: 50px;
+    margin-left: auto;
+    margin-right: auto;
+		margin-top: 20px;
+}
+
+img.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
