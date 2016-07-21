@@ -43,25 +43,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				}
 		})
 		.factory('drawInformations', function($http) {
-				function getLabel(data) {
-						var lateTime = data.RETARD.__text;
-						var _text = "<span class='infospan' style='color:red;'> En retard de " + lateTime + "s</span>";
-						if(lateTime < 0) {
-								_text = "<span class='infospan' style='color:green;'> En avance de " + Math.abs(lateTime) + "s</span>";
-						}
-						return  _text;
-				}
-
-				function getNextStop(data) {
-						var nextStopId = data.RS_SV_ARRET_P_SUIV.__text;
-						return "<span class='infospan'>Prochain arret: " + nextStopId + "</span>";
-				}
-
-				function getSpeedInfo(data) {
-						var speed = data.VITESSE.__text;
-						return "<span class='infospan'>Vitesse: " + speed + "km/h</span>";
-				}
-				
 				function getTramInformation(infos) {
 						var p = '<div class="button-bar"><span class="button" id="car-2" style="background-color: rgb(240, 195, 117);">68%</span><span class="button" id="car-1" style="background-color: rgb(240, 173, 117);">77%</span><span class="button" id="car-3" style="background-color: rgb(179, 240, 117);">25%</span><span class="button best" id="car-4" style="background-color: rgb(117, 240, 117);">0%</span><span class="button" id="car-5" style="background-color: rgb(146, 240, 117);">11%</span><span class="button" id="car-6" style="background-color: rgb(240, 218, 117);">59%</span></div>';
 						
@@ -77,6 +58,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								'</div>'
 						return content;
 				}
+
+				function secondsToString(seconds)	{
+						var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+						var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+						return numminutes + "m " + numseconds + "s";
+				}
 				
 				return {
 						markerTrams : [],
@@ -86,13 +73,19 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								
 								var datas = datas_complete.vehicules;
 								for(var i = 0; i < datas.length; ++i) {
-										console.log(datas[i]);
 										var positionLatLng = {lat: datas[i].lat, lng: datas[i].lng};
-
+										
+										var lateTime = datas[i].timing;
+										var _text = "<span class='infospan' style='color:red;'> En retard de " + secondsToString(lateTime) + "</span>";
+										if(lateTime < 0) 
+												_text = "<span class='infospan' style='color:green;'> En avance de " + secondsToString(Math.abs(lateTime)) + "</span>";
+										else if (lateTime == 0)
+												_text = "<span class='infospan' style='color:blue;'> Vehicule à l'heure</span>";
+										
 										var contentString = '<h1 style="font-size: 20px; margin: 0;">Direction '+ datas_complete.name +'</h1>'+
-												'Prochain arret: ' + datas[i].next + "<br>" +
-												'Retard: ' + datas[i].timing + "<br>" +
-												'Vitesse: ' + datas[i].speed + "<br>" +
+												'<span class="infospan">Prochain arret: ' + datas[i].next + "</span><br>" +
+												_text + "<br>" +
+												'<span class="infospan">Vitesse: ' + datas[i].speed + "km/h</span><br>" +
 												'</div>';
 
 										var marker = new google.maps.Marker({
@@ -261,11 +254,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						});	
 				}, 10000);		
 		})
-		.controller('myCtrl', function($scope, $interval, $timeout, getDatasService, drawInformations) {
+		.controller('myCtrl', function($scope, $interval, $timeout) {
 				var colors = [];
-				var _TRAM = $scope.currentChoice.line.id;
-				var _SENS = $scope.currentChoice.direction.id == 1 ? 'ALLER' : 'RETOUR';
-				var _STOP = $scope.currentChoice.station.id;
 
 				function makeColorGradient() {
 						for(var i = 0; i <= 100; i++) {
@@ -349,12 +339,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						$timeout(function() { httpGetAsync("/datas_"+ (k%3) +".txt", drawInterface);}, 1500);
 
 						k++;
-
-						getDatasService.getVehicle(_TRAM, _SENS).then(
-								function(answer) {
-										var ans = answer.data.results;
-										drawInformations.drawMarkersTrams(ans, icon_tram, map);								
-								});	
 				}
 				
 				
