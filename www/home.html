@@ -6,7 +6,7 @@
 <ion-view view-title="Choose your itinerary" ng-controller="homeCtrl">
   <ion-content class="padding">
 
-		<img class="centered" src="/img/logo_ct_big.png" alt="Comfort Train" height="140">
+		<img class="centered" src="/img/logo_ct_big.png" alt="Comfort Train" height="140"/>
 		<div class="list list-inset">
       <label class="item  item-input item-stacked-label item-icon-right">
       	<i class="icon ion-merge"></i>
@@ -61,10 +61,23 @@
               input-class="form-control form-control-small"
               />
       </label>
-      <a class="button button-block button-outline button-positive " ng-disabled="cantSearch" href="#/display">
-      	<i class="icon ion-search"></i>
-      	Chercher
-      </a>
-    </div>		
+       <!--  <label class="item item-input item-floating-label">
+    <span class="input-label">First Name</span>
+    <input type="text" placeholder="First Name">
+  </label>
+  <label class="item item-input item-floating-label">
+    <span class="input-label">Last Name</span>
+    <input type="text" placeholder="Last Name">
+  </label>
+  <label class="item item-input item-floating-label">
+    <span class="input-label">Email</span>
+    <input type="text" placeholder="Email">
+  </label> -->
+    </div>  
+    <a class="button button-block button-outline button-positive " ng-disabled="cantSearch" href="#/display">
+      <i class="icon ion-search"></i>
+      Chercher
+    </a>
+    	
   </ion-content>
 </ion-view> 

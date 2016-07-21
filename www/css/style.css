@@ -152,3 +152,9 @@ img.centered {
     margin-left: auto;
     margin-right: auto;
 }
+
+#legend {
+    background: white;
+    padding: 10px;
+    margin: 10px;
+}
