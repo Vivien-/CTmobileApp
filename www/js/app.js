@@ -215,20 +215,26 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
     		$scope.currentChoice = choice;
 				var _TRAM = $scope.currentChoice.line.id;
 				var _SENS = $scope.currentChoice.direction.id == 1 ? 'ALLER' : 'RETOUR';
-				//var _STOP = 404;
 				var _STATION = $scope.currentChoice.station;
+				
 				var geop = new GeoPoint(Number(_STATION.lat), Number(_STATION.lng));
-				var boundingCoordinates = geop.boundingCoordinates(3,true);
+				var boundingCoordinates = geop.boundingCoordinates(1,true);
 				var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(boundingCoordinates[0]["_degLat"],boundingCoordinates[0]["_degLon"]), new google.maps.LatLng(boundingCoordinates[1]["_degLat"],boundingCoordinates[1]["_degLon"])); 
 				var icon_stop = "img/line-stop.png";
-				var icon_tram = "img/tram-marker-icon.png";
-					
+				var icon_tram = "img/tram-marker-icon.png";	
 				var map;
 				map = new google.maps.Map(document.getElementById('map'), {
 						center: {lat: Number(_STATION.lat), lng: Number(_STATION.lng)},
-						//zoom: 14
+    					disableDefaultUI: true
 				});
 				map.fitBounds(bounds);
+				var legend = document.getElementById('legend');
+				var div = document.createElement('div');
+          		div.innerHTML = '<img style="vertical-align:middle" src="img/line.png"> Ligne '+$scope.currentChoice.line.name+'<br><img style="vertical-align:middle" src="img/direction.png"> Direction '+$scope.currentChoice.direction.name+'<br><img style="vertical-align:middle" src="img/station.png"> Station '+$scope.currentChoice.station.name;
+          		legend.appendChild(div);
+          		map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
+
+
 				getDatasService.getStops(_TRAM).then(
 						function(answer) {
 								var ans = answer.data.results;
