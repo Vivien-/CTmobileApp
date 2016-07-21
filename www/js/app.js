@@ -80,14 +80,16 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				
 				return {
 						markerTrams : [],
-						drawMarkersTrams: function(datas, style, map) {
+						drawMarkersTrams: function(datas_complete, style, map) {
 								var copyMarkerTrams = this.markerTrams;
 								this.markerTrams = [];
+								
+								var datas = datas_complete.vehicules;
 								for(var i = 0; i < datas.length; ++i) {
 										console.log(datas[i]);
 										var positionLatLng = {lat: datas[i].lat, lng: datas[i].lng};
-//										var contentString = getTramInformation(datas[i]);
-										var contentString = '<h1 style="font-size: 20px; margin: 0;">Direction '+ datas[i].next +'</h1>'+
+
+										var contentString = '<h1 style="font-size: 20px; margin: 0;">Direction '+ datas_complete.name +'</h1>'+
 												'Prochain arret: ' + datas[i].next + "<br>" +
 												'Retard: ' + datas[i].timing + "<br>" +
 												'Vitesse: ' + datas[i].speed + "<br>" +
@@ -253,20 +255,23 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				
 				getDatasService.getVehicle(_TRAM, _SENS).then(
 						function(answer) {
-								var ans = answer.data.results.vehicules;
+								var ans = answer.data.results;
 								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
 						});
 
 				$interval(function() { 
 						getDatasService.getVehicle(_TRAM, _SENS).then(
 						function(answer) {
-								var ans = answer.data.results.vehicules;
+								var ans = answer.data.results;
 								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
 						});	
-				}, 15000);		
+				}, 10000);		
 		})
-		.controller('myCtrl', function($scope, $interval, $timeout) {
+		.controller('myCtrl', function($scope, $interval, $timeout, getDatasService, drawInformations) {
 				var colors = [];
+				var _TRAM = $scope.currentChoice.line.id;
+				var _SENS = $scope.currentChoice.direction.id == 1 ? 'ALLER' : 'RETOUR';
+				var _STOP = $scope.currentChoice.station.id;
 
 				function makeColorGradient() {
 						for(var i = 0; i <= 100; i++) {
@@ -350,6 +355,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						$timeout(function() { httpGetAsync("/datas_"+ (k%3) +".txt", drawInterface);}, 1500);
 
 						k++;
+
+						getDatasService.getVehicle(_TRAM, _SENS).then(
+								function(answer) {
+										var ans = answer.data.results;
+										drawInformations.drawMarkersTrams(ans, icon_tram, map);								
+								});	
 				}
 				
 				
