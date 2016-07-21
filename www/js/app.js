@@ -256,10 +256,13 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								var ans = answer.data.results;
 								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
 						});	
-				}, 315000);		
+				}, 10000);		
 		})
-		.controller('myCtrl', function($scope, $interval, $timeout) {
+		.controller('myCtrl', function($scope, $interval, $timeout, getDatasService, drawInformations) {
 				var colors = [];
+				var _TRAM = $scope.currentChoice.line.id;
+				var _SENS = $scope.currentChoice.direction.id == 1 ? 'ALLER' : 'RETOUR';
+				var _STOP = $scope.currentChoice.station.id;
 
 				function makeColorGradient() {
 						for(var i = 0; i <= 100; i++) {
@@ -343,6 +346,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						$timeout(function() { httpGetAsync("/datas_"+ (k%3) +".txt", drawInterface);}, 1500);
 
 						k++;
+
+						getDatasService.getVehicle(_TRAM, _SENS).then(
+								function(answer) {
+										var ans = answer.data.results;
+										drawInformations.drawMarkersTrams(ans, icon_tram, map);								
+								});	
 				}
 				
 				
