@@ -1,12 +1,12 @@
 <ion-view view-title="Choose your itinerary">
-  <ion-content class="padding">
-		<div class="span-wrapper">
+  <ion-content>
+		<div class="span-wrapper padding">
 			<a href="#/home"><i id="back-home" class="ion-android-arrow-back"></i></a>
 			<span id="left"></span>
 			<span id="refresh" class="ion-loop"></span>
 		</div>
 		<div id="legend"></div>
-		<div style="height:75%;" ng-controller="mapCtrl">
+		<div style="height:72%;" ng-controller="mapCtrl">
 			<div id="map" data-tap-disabled="true"></div>
 		</div>
 
@@ -16,8 +16,11 @@
 					<div class="loading inner"></div>
 				</div>
 			</div>
-			<div class="button-bar" id="train-display"></div>
-			<span id="right" class="ion-arrow-right-c"></span>
+			<div class="button-bar padding" id="train-display"></div>
+			<div>
+				<img style="float: right; vertical-align:middle;padding-right: 10px;padding-left: 10px;" src="img/ic_direction_right.png">
+				<p id="right"></p>
+			</div>
 		</div>
 	</ion-content>
 </ion-view>
