@@ -29,7 +29,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
         };
 		})
 		.factory('getDatasService', function($http) {
-				var _KEY = "8PVVD8CAA8";
 				return {
 						getLine: function(id) {
 								return $http.get("/data/lineGeometry?id=" + id);
@@ -39,26 +38,13 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						},
 						getVehicle: function(lineId, sens) {
 								return $http.get("/data/getVehicle?id=" + lineId + "&sens=" + sens);								
+						},
+						getStationInformation: function(lineId, stationId) {
+								return $http.get("/data/stationInformation?lineId=" + lineId + "&stationId=" + stationId);
 						}
 				}
 		})
-		.factory('drawInformations', function($http) {
-				function getTramInformation(infos) {
-						var p = '<div class="button-bar"><span class="button" id="car-2" style="background-color: rgb(240, 195, 117);">68%</span><span class="button" id="car-1" style="background-color: rgb(240, 173, 117);">77%</span><span class="button" id="car-3" style="background-color: rgb(179, 240, 117);">25%</span><span class="button best" id="car-4" style="background-color: rgb(117, 240, 117);">0%</span><span class="button" id="car-5" style="background-color: rgb(146, 240, 117);">11%</span><span class="button" id="car-6" style="background-color: rgb(240, 218, 117);">59%</span></div>';
-						
-						var label = getLabel(infos);
-						var nextStop = getNextStop(infos);
-						var speedinfo = getSpeedInfo(infos);
-						var content = '<div class="info-div-tram">'+
-								'<h1 style="font-size: 20px; margin: 0;">Direction '+ infos.TERMINUS.__text +'</h1>'+
-								nextStop + "<br>" +
-								label + "<br>" +
-								speedinfo + "<br>" +
-								p + "<br>" +
-								'</div>'
-						return content;
-				}
-
+		.factory('drawInformations', function($http, getDatasService) {
 				function secondsToString(seconds)	{
 						var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
 						var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
@@ -67,12 +53,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				
 				return {
 						markerTrams : [],
-						drawMarkersTrams: function(datas_complete, style, map) {
+						drawMarkersTrams: function(datas_complete, style, lineId, map) {
 								var copyMarkerTrams = this.markerTrams;
 								this.markerTrams = [];
 								
 								var datas = datas_complete.vehicules;
 								for(var i = 0; i < datas.length; ++i) {
+										var nextStation = getDatasService.getStationInformation(lineId, datas[i].next);
+										nextStation.then(
+												function(answer) {
+														console.log(answer);
+												});
+
 										var positionLatLng = {lat: datas[i].lat, lng: datas[i].lng};
 										
 										var lateTime = datas[i].timing;
@@ -82,8 +74,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										else if (lateTime == 0)
 												_text = "<span class='infospan' style='color:blue;'> Vehicule à l'heure</span>";
 										
+										
 										var contentString = '<h1 style="font-size: 20px; margin: 0;">Direction '+ datas_complete.name +'</h1>'+
-												'<span class="infospan">Prochain arret: ' + datas[i].next + "</span><br>" +
+												'<span class="infospan">Prochain arret: ' + nextStation.name + "</span><br>" +
 												_text + "<br>" +
 												'<span class="infospan">Vitesse: ' + datas[i].speed + "km/h</span><br>" +
 												'</div>';
@@ -91,7 +84,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										var marker = new google.maps.Marker({
 												position: positionLatLng,
 												map: map,
-												icon: {url: style, scaledSize: new google.maps.Size(40,40) }
+												optimized: false,
+												zIndex:99999999,
+												icon: {url: style, scaledSize: new google.maps.Size(40,40), anchor: new google.maps.Point(20,20) }
 										});
 										
 										marker.info = new google.maps.InfoWindow({
@@ -108,16 +103,20 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								for (var i = 0; i < copyMarkerTrams.length; i++) 
 										copyMarkerTrams[i].setMap(null);
 						},
-						drawMarkersStops: function(datas, style, map) {
+						drawMarkersStops: function(datas, station_selected_id, map) {
 								for(var i = 0; i < datas.length; ++i) {
 										var contentString = '<div class="info-div-stop">'+
 												'<h1 style="font-size: 20px; margin: 0;">Station '+ datas[i].name +'</h1>'+
 												'</div>';
 
+										var style = {url: "img/map_station.png", anchor: new google.maps.Point(7,7), scaledSize: new google.maps.Size(14,14)};
+										if(station_selected_id == datas[i].id)
+												style = {url: "img/map_station_highlight.png", anchor: new google.maps.Point(12,12), scaledSize: new google.maps.Size(24,24)};
 										var marker = new google.maps.Marker({
 												position: {lat: parseFloat(datas[i].lat), lng: parseFloat(datas[i].lng)} ,
 												map: map,
-												icon: {url: style, anchor: new google.maps.Point(7,7), scaledSize: new google.maps.Size(14,14)}
+//												icon: {url: style, anchor: new google.maps.Point(7,7), scaledSize: new google.maps.Size(14,14)}
+												icon: style
 										});
 
 										marker.info = new google.maps.InfoWindow({
@@ -134,7 +133,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						},
 						drawLines: function(datas, map) {
 								var options = {
-										strokeColor: 'violet',
+										strokeColor: '#82227b',
 										strokeOpacity: 1.0,
 										strokeWeight: 3,
 										map: map
@@ -220,8 +219,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				var geop = new GeoPoint(Number(_STATION.lat), Number(_STATION.lng));
 				var boundingCoordinates = geop.boundingCoordinates(1,true);
 				var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(boundingCoordinates[0]["_degLat"],boundingCoordinates[0]["_degLon"]), new google.maps.LatLng(boundingCoordinates[1]["_degLat"],boundingCoordinates[1]["_degLon"])); 
-				var icon_stop = "img/line-stop.png";
 				var icon_tram = "img/tram-marker-icon.png";	
+
 				var map;
 				map = new google.maps.Map(document.getElementById('map'), {
 						center: {lat: Number(_STATION.lat), lng: Number(_STATION.lng)},
@@ -230,15 +229,15 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				map.fitBounds(bounds);
 				var legend = document.getElementById('legend');
 				var div = document.createElement('div');
-          		div.innerHTML = '<img style="vertical-align:middle" src="img/line.png"> Ligne '+$scope.currentChoice.line.name+'<br><img style="vertical-align:middle" src="img/direction.png"> Direction '+$scope.currentChoice.direction.name+'<br><img style="vertical-align:middle" src="img/station.png"> Station '+$scope.currentChoice.station.name;
-          		legend.appendChild(div);
-          		map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
-
+        div.innerHTML = '<img style="vertical-align:middle" src="img/line.png"> Ligne: '+$scope.currentChoice.line.name+'<br><img style="vertical-align:middle" src="img/direction.png"> Direction: '+$scope.currentChoice.direction.name+'<br><img style="vertical-align:middle" src="img/station.png"> Station: '+$scope.currentChoice.station.name;
+        legend.appendChild(div);
+        map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
+				
 
 				getDatasService.getStops(_TRAM).then(
 						function(answer) {
 								var ans = answer.data.results;
-								drawInformations.drawMarkersStops(ans, icon_stop, map);
+								drawInformations.drawMarkersStops(ans, _STATION.id, map);
 						});
 
 				getDatasService.getLine(_TRAM).then(
@@ -249,14 +248,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				getDatasService.getVehicle(_TRAM, _SENS).then(
 						function(answer) {
 								var ans = answer.data.results;
-								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
+								drawInformations.drawMarkersTrams(ans, icon_tram, _TRAM, map);								
 						});
 
 				$interval(function() { 
 						getDatasService.getVehicle(_TRAM, _SENS).then(
 						function(answer) {
 								var ans = answer.data.results;
-								drawInformations.drawMarkersTrams(ans, icon_tram, map);								
+								drawInformations.drawMarkersTrams(ans, icon_tram, _TRAM, map);								
 						});	
 				}, 10000);		
 		})
