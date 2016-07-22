@@ -94,7 +94,7 @@ div span {
 }
 
 h1 {
-		color: #10729f !important;
+		color: white !important;
 }
 
 #map {
@@ -188,13 +188,26 @@ img.centered {
 		font-size: 12px;
 }
 
-.list-inset .item:last-child {
-		border-bottom-style: none !important;
-}
 
 .item {
 		border-style: none !important;
-    border-bottom: #2196F3 !important;
+}
+
+.bar-positive {
+	background-color: #13719F !important;
+}
+.button-positive {
+	color: white;
+	background-color: #13719F !important;
+}
+#l, #d, #s{
+	width: 90%;
+	padding-left: 20px;
+	border-bottom: #2196F3 !important;
     border-bottom-style: solid !important;
     border-bottom-width: 1px !important;
+}
+
+input:disabled{
+    background-color: white;
 }
