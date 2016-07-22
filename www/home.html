@@ -1,18 +1,18 @@
-<ion-header-bar class="bar-stable">
-  <img src="/img/logo_ct.png">
-	<h1 class="title">Comfort Train</h1>
-</ion-header-bar>
-
 <ion-view view-title="Choose your itinerary" ng-controller="homeCtrl">
+	<ion-header-bar align-title="center" class="bar-positive">
+		<img src="/img/logo.png" style="width:10%">
+		<h1 class="title">Comfort Train</h1>
+	</ion-header-bar>
+
   <ion-content class="padding">
 
-		<img class="centered" src="/img/logo_ct_big.png" alt="Comfort Train" height="140"/>
+		<img class="centered" src="/img/ic_home_logo.png" alt="Comfort Train" height="140"/>
 		<div class="list list-inset">
-      <label class="item  item-input item-stacked-label item-icon-right">
-      	<i class="icon ion-merge"></i>
-      	<span class="input-label">Line</span>
+      <label class="item  item-input  item-icon-left">
+      	<img src="/img/ic_line.png" style="width:6%">
+ 
       	<angucomplete-alt id="l"
-              placeholder="Tram B"
+              placeholder="Ligne"
               pause="400"
               selected-object="lineSelected"
               remote-url="/data/lines?q="
@@ -25,11 +25,11 @@
               input-class="form-control form-control-small"
               />
       </label>
-      <label class="item  item-input item-stacked-label item-icon-right">
-      	<i class="icon ion-navigate"></i>
-      	<span class="input-label">Direction</span>
+      <label class="item  item-input  item-icon-left">
+      	<img src="/img/ic_direction.png" style="width:6%">
+      	
         <angucomplete-alt id="d"
-              placeholder="Pessac centre"
+              placeholder="Destination"
               pause="400"
               selected-object="directionSelected"
               remote-url="/data/directions"
@@ -43,11 +43,11 @@
               input-class="form-control form-control-small"
               />
       </label>
-      <label class="item  item-input item-stacked-label item-icon-right">
-      	<i class="icon ion-location"></i>
-      	<span class="input-label">Station</span>
+      <label class="item  item-input  item-icon-left">
+      	<img src="/img/ic_station.png" style="width:6%">
+      	
         <angucomplete-alt id="s"
-              placeholder="Victoire"
+              placeholder="Station"
               pause="400"
               selected-object="stationSelected"
               remote-url="/data/stations"
@@ -61,20 +61,8 @@
               input-class="form-control form-control-small"
               />
       </label>
-       <!--  <label class="item item-input item-floating-label">
-    <span class="input-label">First Name</span>
-    <input type="text" placeholder="First Name">
-  </label>
-  <label class="item item-input item-floating-label">
-    <span class="input-label">Last Name</span>
-    <input type="text" placeholder="Last Name">
-  </label>
-  <label class="item item-input item-floating-label">
-    <span class="input-label">Email</span>
-    <input type="text" placeholder="Email">
-  </label> -->
     </div>  
-    <a class="button button-block button-outline button-positive " ng-disabled="cantSearch" href="#/display">
+    <a class="button button-block button-positive " ng-disabled="cantSearch" href="#/display">
       <i class="icon ion-search"></i>
       Chercher
     </a>
