@@ -56,15 +56,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						drawMarkersTrams: function(datas_complete, style, lineId, map) {
 								var copyMarkerTrams = this.markerTrams;
 								this.markerTrams = [];
-								
 								var datas = datas_complete.vehicules;
+								
 								for(var i = 0; i < datas.length; ++i) {
-										var nextStation = getDatasService.getStationInformation(lineId, datas[i].next);
-										nextStation.then(
-												function(answer) {
-														console.log(answer);
-												});
-
 										var positionLatLng = {lat: datas[i].lat, lng: datas[i].lng};
 										
 										var lateTime = datas[i].timing;
@@ -74,9 +68,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										else if (lateTime == 0)
 												_text = "<span class='infospan' style='color:blue;'> Vehicule à l'heure</span>";
 										
-										
 										var contentString = '<h1 style="font-size: 20px; margin: 0;">Direction '+ datas_complete.name +'</h1>'+
-												'<span class="infospan">Prochain arret: ' + nextStation.name + "</span><br>" +
 												_text + "<br>" +
 												'<span class="infospan">Vitesse: ' + datas[i].speed + "km/h</span><br>" +
 												'</div>';
@@ -229,11 +221,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				map.fitBounds(bounds);
 				var legend = document.getElementById('legend');
 				var div = document.createElement('div');
-        div.innerHTML = '<img style="vertical-align:middle" src="img/line.png"> Ligne: '+$scope.currentChoice.line.name+'<br><img style="vertical-align:middle" src="img/direction.png"> Direction: '+$scope.currentChoice.direction.name+'<br><img style="vertical-align:middle" src="img/station.png"> Station: '+$scope.currentChoice.station.name;
+        div.innerHTML = '<img style="vertical-align:middle" src="img/ic_line.png"> Ligne: <span class="violet">'+$scope.currentChoice.line.name+'</span><br><img style="vertical-align:middle" src="img/ic_direction.png"> Direction: <span class="violet">'+$scope.currentChoice.direction.name+'</span><br><img style="vertical-align:middle" src="img/ic_station.png"> Station: <span class="violet">'+$scope.currentChoice.station.name+'</span>';
         legend.appendChild(div);
         map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
-				
 
+				document.getElementById("left").innerHTML = $scope.currentChoice.station.name;
+				document.getElementById("right").innerHTML = $scope.currentChoice.direction.name;
+
+				
 				getDatasService.getStops(_TRAM).then(
 						function(answer) {
 								var ans = answer.data.results;
@@ -244,6 +239,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						function(answer) {
 								drawInformations.drawLines(answer.data.results, map);
 						});
+
 				
 				getDatasService.getVehicle(_TRAM, _SENS).then(
 						function(answer) {
@@ -300,36 +296,42 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				}
 
 				function buildWrappers(json) {
-						for(var i = 0; i < json.length; i++) {
+						var width = Math.floor(100 / json.length);
+						for(var i = 0; i < json.length - 1; i++) {
 								var node = document.createElement("span");
-								node.className = "button";
+								node.className = "button car";
 								node.id = json[i].id;
 								if(typeof json[i].best != "undefined") {
 										node.className += " best";
 								}
+								node.style.width = width + "%";
 								document.getElementById("train-display").appendChild(node);
 						}
+						
+						width = 100 - (json.length - 1) * width;
+						var node = document.createElement("span");
+						node.className = "button img car";
+						node.id = "front-vehicle";
+						node.style.backgroundColor = colors[parseInt(json[json.length-1].occupation)];
+						node.style.width = width + "%";
+						document.getElementById("train-display").appendChild(node);
 				}
 
 				function setOccupation(json) {
-						for(var i = 0; i < json.length; i++) {
+						for(var i = 0; i < json.length - 1; i++) {
 								var node = document.getElementById(json[i].id);
 								node.style.backgroundColor = colors[parseInt(json[i].occupation)];
 								node.innerHTML = json[i].occupation + "%";
 						}
-				}
-
-				function createContext(context) {
-						document.getElementById("left").innerHTML = "Direction: " + context.left;
-						document.getElementById("right").innerHTML = "Direction: " +  context.right;
+						var node = document.getElementById("front-vehicle");
+						node.style.backgroundColor = colors[parseInt(json[i].occupation)];
+						node.innerHTML = json[json.length - 1].occupation + "%"
 				}
 
 				function drawInterface(response) {
 						var json = JSON.parse(response);
 						var trainData = getTrainData(json);
 						var context = getContext(json);
-						if(!wrapperCreated)
-								createContext(context);
 						createCars(trainData);
 						document.getElementById("loaderWrapper").style.display = 'none';
 						document.getElementById("train-display").style.display = 'inline-flex';						
