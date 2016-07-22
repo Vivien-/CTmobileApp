@@ -68,7 +68,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										else if (lateTime == 0)
 												_text = "<span class='infospan' style='color:blue;'> Vehicule à l'heure</span>";
 										
-										var contentString = '<h1 style="font-size: 20px; margin: 0;">Direction '+ datas_complete.name +'</h1>'+
+										var contentString = '<h2 style="font-size: 20px; margin: 0;">Direction '+ datas_complete.name +'</h2>'+
 												_text + "<br>" +
 												'<span class="infospan">Vitesse: ' + datas[i].speed + "km/h</span><br>" +
 												'</div>';
@@ -98,7 +98,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						drawMarkersStops: function(datas, station_selected_id, map) {
 								for(var i = 0; i < datas.length; ++i) {
 										var contentString = '<div class="info-div-stop">'+
-												'<h1 style="font-size: 20px; margin: 0;">Station '+ datas[i].name +'</h1>'+
+												'<h2 style="font-size: 20px; margin: 0;">Station '+ datas[i].name +'</h2>'+
 												'</div>';
 
 										var style = {url: "img/map_station.png", anchor: new google.maps.Point(7,7), scaledSize: new google.maps.Size(14,14)};
