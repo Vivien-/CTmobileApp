@@ -211,7 +211,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				var geop = new GeoPoint(Number(_STATION.lat), Number(_STATION.lng));
 				var boundingCoordinates = geop.boundingCoordinates(1,true);
 				var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(boundingCoordinates[0]["_degLat"],boundingCoordinates[0]["_degLon"]), new google.maps.LatLng(boundingCoordinates[1]["_degLat"],boundingCoordinates[1]["_degLon"])); 
-				var icon_tram = "img/tram-marker-icon.png";	
+				var icon_tram = "img/ic_map_train_situation.png";	
 
 				var map;
 				map = new google.maps.Map(document.getElementById('map'), {
