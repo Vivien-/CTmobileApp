@@ -30,7 +30,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 		})
 		.factory('getDatasService', function($http) {
 				//var serveur_ip = "http://192.168.1.13:8080";
-				var serveur_ip = "http://localhost:8080"; // à changer pour l'ip du serveur (ex celle du dessu)
+				var serveur_ip = ""; // à changer pour l'ip du serveur (ex celle du dessu) pour tester sur un device 
 				return {
 						getLine: function(id) {
 								return $http.get(serveur_ip + "/data/lineGeometry?id=" + id);
