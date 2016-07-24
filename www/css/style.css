@@ -31,7 +31,10 @@
 }
 
 .img {
-		-webkit-mask-image: url('/img/ic_train_right.png');
+		mask-image: url('../img/ic_train_right.png');
+		mask-size: 100% 47px;
+
+		-webkit-mask-image: url('../img/ic_train_right.png');
 		-webkit-mask-size: 100% 47px;
 		min-height: 47px !important;
 		margin-top: -7px;

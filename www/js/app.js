@@ -29,19 +29,21 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
         };
 		})
 		.factory('getDatasService', function($http) {
+				//var serveur_ip = "http://192.168.1.13:8080";
+				var serveur_ip = "http://localhost:8080"; // à changer pour l'ip du serveur (ex celle du dessu)
 				return {
 						getLine: function(id) {
-								return $http.get("/data/lineGeometry?id=" + id);
+								return $http.get(serveur_ip + "/data/lineGeometry?id=" + id);
 						},
 						getStops: function(lineId) {
-								return $http.get("/data/stationsPosition?id=" + lineId);
+								return $http.get(serveur_ip + "/data/stationsPosition?id=" + lineId);
 						},
 						getVehicle: function(lineId, sens) {
-								return $http.get("/data/getVehicle?id=" + lineId + "&sens=" + sens);								
-						},
+								return $http.get(serveur_ip + "/data/getVehicle?id=" + lineId + "&sens=" + sens);								
+						}/*,
 						getStationInformation: function(lineId, stationId) {
 								return $http.get("/data/stationInformation?lineId=" + lineId + "&stationId=" + stationId);
-						}
+						}*/
 				}
 		})
 		.factory('drawInformations', function($http, getDatasService) {
@@ -343,7 +345,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				function updateView() {
 						document.getElementById("train-display").style.display = 'none';
 						document.getElementById("loaderWrapper").style.display = 'block';
-						$timeout(function() { httpGetAsync("/datas_"+ (k%3) +".txt", drawInterface);}, 1500);
+						$timeout(function() { httpGetAsync("datas_"+ (k%3) +".txt", drawInterface);}, 1500);
 
 						k++;
 				}
