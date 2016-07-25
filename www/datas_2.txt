@@ -9,6 +9,9 @@
      {"occupation": 0, "id":"car-3"},
      {"occupation": 0, "best": true, "id":"car-4"},
      {"occupation": 11, "id":"car-5"},
-     {"occupation": 99, "id":"car-6"}
+     {"occupation": 99, "id":"car-6"},
+		 {"occupation": 97, "id":"car-7"}, 
+     {"occupation": 88, "id":"car-8"},
+     {"occupation": 45, "id":"car-9"}
 	]
 }
