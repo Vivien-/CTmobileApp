@@ -56,7 +56,10 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				return {
 						markerTrams : [],
 						drawMarkersTrams: function(datas_complete, style, lineId, map) {
-								var copyMarkerTrams = this.markerTrams;
+								//var copyMarkerTrams = this.markerTrams;
+								//this.markerTrams = [];
+								for (var i = 0; i < this.markerTrams.length; i++) 
+										this.markerTrams[i].setMap(null);
 								this.markerTrams = [];
 								var datas = datas_complete.vehicules;
 								
@@ -94,8 +97,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										
 										this.markerTrams.push(marker);
 								}
-								for (var i = 0; i < copyMarkerTrams.length; i++) 
-										copyMarkerTrams[i].setMap(null);
+								
 						},
 						drawMarkersStops: function(datas, station_selected_id, map) {
 								for(var i = 0; i < datas.length; ++i) {
