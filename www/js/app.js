@@ -91,12 +91,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										});
 										
 										var dir_bg = {
-												path: 'M 5, 5 m -5, 0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0',
+												path: 'M 4, 4 m -4, 0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0',
 												strokeColor: '#fff',
 												fillColor: '#fff',
 												fillOpacity: 1,
 												rotation: parseInt(datas[i].orientation),
-												anchor: new google.maps.Point(5,25)
+												anchor: new google.maps.Point(4,23)
 										}
 
 										var marker_bg = new google.maps.Marker({
@@ -108,12 +108,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										});
 
 										var dir = {
-												path: 'M 3, 3 m -3, 0 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0',
+												path: 'M 2 15 l 2 0 l 0 -12 l -2 0 Z M 3, 3 m -3, 0 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0',
 												strokeColor: '#0073a2',
 												fillColor: '#0073a2',
 												fillOpacity: 1,
 												rotation: parseInt(datas[i].orientation),
-												anchor: new google.maps.Point(3,23)
+												anchor: new google.maps.Point(3,22)
 										}
 
 										var marker_direction = new google.maps.Marker({
