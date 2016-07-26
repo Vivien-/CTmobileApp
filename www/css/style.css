@@ -61,6 +61,7 @@
 
 .span-wrapper {
 		display: table;
+		width: 100%;
 		background-color: #13719f;
 }
 
@@ -78,6 +79,10 @@ div span {
 		cursor: pointer;
 }
 
+#back-home:hover {
+		opacity: 0.6;
+}
+
 #refresh {
 		cursor: pointer;
 		font-size: 40px;
@@ -86,6 +91,10 @@ div span {
 		width: 0%;
 		padding-top: 0;
 		padding-right: 30px;
+}
+
+#refresh:hover {
+		opacity: 0.6;
 }
 
 @keyframes fade {
