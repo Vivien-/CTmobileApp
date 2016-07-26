@@ -89,23 +89,41 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 												zIndex:99999999,
 												icon: {url: style, scaledSize: new google.maps.Size(40,40), anchor: new google.maps.Point(20,20) }
 										});
-
-										var arrow = {
-												path: 'M8 16 L4 0 L0 16 Z',
-												strokeColor: color,
-												fillColor: color,
+										
+										var dir_bg = {
+												path: 'M 5, 5 m -5, 0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0',
+												strokeColor: '#fff',
+												fillColor: '#fff',
 												fillOpacity: 1,
 												rotation: parseInt(datas[i].orientation),
-												anchor: new google.maps.Point(4,27)
-										};
-										
-										var marker_arrow = new google.maps.Marker({
+												anchor: new google.maps.Point(5,25)
+										}
+
+										var marker_bg = new google.maps.Marker({
+												position: positionLatLng,
+												map: map,
+												optimized: false,
+												zIndex:99999998,
+												icon: dir_bg
+										});
+
+										var dir = {
+												path: 'M 3, 3 m -3, 0 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0',
+												strokeColor: '#0073a2',
+												fillColor: '#0073a2',
+												fillOpacity: 1,
+												rotation: parseInt(datas[i].orientation),
+												anchor: new google.maps.Point(3,23)
+										}
+
+										var marker_direction = new google.maps.Marker({
 												position: positionLatLng,
 												map: map,
 												optimized: false,
 												zIndex:99999999,
-												icon: arrow
+												icon: dir
 										});
+
 										
 										marker.info = new google.maps.InfoWindow({
 												content:  contentString
@@ -117,7 +135,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										});
 										
 										this.markerTrams.push(marker);
-										this.markerTrams.push(marker_arrow);
+										this.markerTrams.push(marker_bg);
+										this.markerTrams.push(marker_direction);
 								}
 								
 						},
