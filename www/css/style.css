@@ -9,9 +9,7 @@
 }
 
 #train-display {
-		margin-top: 20px;
-		padding-top: 10px;
-		height: 50px;
+		height: 45px;
 		white-space: nowrap;
 		margin-left: auto;
 		margin-right: auto;
@@ -213,4 +211,13 @@ img.centered {
 
 input:disabled{
     background-color: white;
+}
+
+ion-header-bar img {
+		max-height: 100%;
+    max-width: 100%;
+}
+
+h2 {
+		color: #696161;
 }

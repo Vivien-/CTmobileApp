@@ -65,13 +65,17 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								
 								for(var i = 0; i < datas.length; ++i) {
 										var positionLatLng = {lat: datas[i].lat, lng: datas[i].lng};
-										
+
 										var lateTime = datas[i].timing;
+										var color = "red";
 										var _text = "<span class='infospan' style='color:red;'> En retard de " + secondsToString(lateTime) + "</span>";
-										if(lateTime < 0) 
+										if(lateTime < 0) {
 												_text = "<span class='infospan' style='color:green;'> En avance de " + secondsToString(Math.abs(lateTime)) + "</span>";
-										else if (lateTime == 0)
+												color = "green";
+										}	else if (lateTime == 0) {
 												_text = "<span class='infospan' style='color:blue;'> Vehicule à l'heure</span>";
+												color = "blue";
+										}
 										
 										var contentString = '<h2 style="font-size: 20px; margin: 0;">Direction '+ datas_complete.name +'</h2>'+
 												_text + "<br>" +
@@ -85,6 +89,23 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 												zIndex:99999999,
 												icon: {url: style, scaledSize: new google.maps.Size(40,40), anchor: new google.maps.Point(20,20) }
 										});
+
+										var arrow = {
+												path: 'M8 16 L4 0 L0 16 Z',
+												strokeColor: color,
+												fillColor: color,
+												fillOpacity: 1,
+												rotation: parseInt(datas[i].orientation),
+												anchor: new google.maps.Point(4,27)
+										};
+										
+										var marker_arrow = new google.maps.Marker({
+												position: positionLatLng,
+												map: map,
+												optimized: false,
+												zIndex:99999999,
+												icon: arrow
+										});
 										
 										marker.info = new google.maps.InfoWindow({
 												content:  contentString
@@ -96,6 +117,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										});
 										
 										this.markerTrams.push(marker);
+										this.markerTrams.push(marker_arrow);
 								}
 								
 						},
