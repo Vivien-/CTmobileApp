@@ -209,7 +209,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
     .controller('mapCtrl', function($scope, $interval, getDatasService, drawInformations, choice) {
     		$scope.currentChoice = choice;
 				var _TRAM = $scope.currentChoice.line.id;
-				var _SENS = $scope.currentChoice.direction.id == 1 ? 'ALLER' : 'RETOUR';
+				var _SENS = $scope.currentChoice.direction.sens;
 				var _STATION = $scope.currentChoice.station;
 				
 				var geop = new GeoPoint(Number(_STATION.lat), Number(_STATION.lng));
@@ -251,13 +251,20 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 								drawInformations.drawMarkersTrams(ans, icon_tram, _TRAM, map);								
 						});
 
-				$interval(function() { 
+				var promise = $interval(function() { 
 						getDatasService.getVehicle(_TRAM, _SENS).then(
 						function(answer) {
 								var ans = answer.data.results;
 								drawInformations.drawMarkersTrams(ans, icon_tram, _TRAM, map);								
 						});	
-				}, 10000);		
+				}, 10000);
+
+				var home = document.getElementById('home');
+				home.onclick = function(){
+					if(promise != undefined){
+						$interval.cancel(promise);
+					}
+				}		
 		})
 		.controller('myCtrl', function($scope, $interval, $timeout) {
 				var colors = [];
