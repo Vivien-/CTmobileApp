@@ -284,6 +284,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				var home = document.getElementById('home');
 				home.onclick = function(){
 					if(promise != undefined){
+						console.log('stopped');
 						$interval.cancel(promise);
 					}
 				}		
