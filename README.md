@@ -32,6 +32,8 @@ Check que le device est connecté et en dév mode et prêt à recevoir des infos
 ## Pour communiquer avec le serveur
 
 > cd CTserveur
+
+
 > nodejs app.js
 
 Le serveur écoute sur localhost:8080/
