@@ -25,6 +25,8 @@ Check que le device est connecté et en dév mode et prêt à recevoir des infos
 (le smartphone doit être listé et marqué comme “device”)
 
 > ionic build android
+
+
 > ionic run android
 
 ## Pour communiquer avec le serveur
