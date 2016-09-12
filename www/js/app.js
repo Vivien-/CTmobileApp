@@ -29,7 +29,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
         };
 		})
 		.factory('getDatasService', function($http) {
-				//var serveur_ip = "http://192.168.1.13:8080";
+				//				var serveur_ip = "http://52.41.157.4:8080";
 				var serveur_ip = ""; // à changer pour l'ip du serveur (ex celle du dessu) pour tester sur un device 
 				return {
 						getLine: function(id) {
@@ -108,6 +108,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 										});
 
 										var dir = {
+												// draw a line with a circle at its end in svg
 												path: 'M 2 15 l 2 0 l 0 -12 l -2 0 Z M 3, 3 m -3, 0 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0',
 												strokeColor: '#0073a2',
 												fillColor: '#0073a2',
@@ -266,7 +267,27 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 				map.fitBounds(bounds);
 				var legend = document.getElementById('legend');
 				var div = document.createElement('div');
-        div.innerHTML = '<img style="vertical-align:middle" src="img/ic_line.png"> Ligne: <span class="violet">'+$scope.currentChoice.line.name+'</span><br><img style="vertical-align:middle" src="img/ic_direction.png"> Direction: <span class="violet">'+$scope.currentChoice.direction.name+'</span><br><img style="vertical-align:middle" src="img/ic_station.png"> Station: <span class="violet">'+$scope.currentChoice.station.name+'</span>';
+
+				var line_color = "#7B9C41"; // if line is a citeis
+				var line_number = $scope.currentChoice.line.name.replace(/\D+/g, '');
+				if(/lianes|liane/i.test($scope.currentChoice.line.name)) { // if line is a liane
+						line_color = "#008DD0";
+				} else if(/corol|corols/i.test($scope.currentChoice.line.name)) { // if line is a corol
+						line_color = "#F58220";
+				} else if(/fléxo|flexo/i.test($scope.currentChoice.line.name)) { // if line is a flexo
+						line_color = "#008DD0";
+				} else if(/tram a|trama/i.test($scope.currentChoice.line.name)) { // if line is a flexo
+						line_color = "#831F82";
+						line_number = "A";
+				} else if(/tram b|tramb/i.test($scope.currentChoice.line.name)) { // if line is a flexo
+						line_color = "#E50040";
+						line_number = "B";
+				} else if(/tram c|tramc/i.test($scope.currentChoice.line.name)) { // if line is a flexo
+						line_color = "#D35098";
+						line_number = "C";
+				}
+				
+        div.innerHTML = '<img style="vertical-align:middle" src="img/ic_line.png" class="small-img"> Ligne: <span>'+$scope.currentChoice.line.name+ '</span><span class="line-logo" style="background-color: '+line_color+'">'+line_number+'</span><br><img style="vertical-align:middle" src="img/ic_direction.png" class="small-img"> Direction: <span>'+$scope.currentChoice.direction.name+'</span><br><img style="vertical-align:middle" src="img/ic_station.png" class="small-img"> Station: <span>'+$scope.currentChoice.station.name+'</span>';
         legend.appendChild(div);
         map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
 

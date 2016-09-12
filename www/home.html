@@ -5,15 +5,15 @@
 	</ion-header-bar>
 
   <ion-content class="padding">
-		<img class="centered" src="/img/ic_home_logo.png" alt="Comfort Train" height="140"/>
+		<img class="centered" src="img/ic_home_logo.png" alt="Comfort Train" height="140"/>
 		<div class="list">
 
       <label class="item  item-input  item-icon-left">
-      	<img src="img/ic_line.png">
+      	<img src="img/ic_line.png" class="small-img stay-top">
  
       	<angucomplete-alt id="l"
               placeholder="Ligne"
-              pause="400"
+              pause="100"
               selected-object="lineSelected"
               remote-url="/data/lines?q="
               remote-url-data-field="results"
@@ -22,15 +22,17 @@
               minlength="1"
               text-searching="Recherche de lignes ..."
               input-changed="resetLine"
-              input-class="form-control form-control-small"
+						  input-class="form-control form-control-small"
+							auto-match="true"
+							match-class="highlight"
               />
       </label>
       <label class="item  item-input  item-icon-left">
-      	<img src="img/ic_direction.png">
+      	<img src="img/ic_direction.png" class="small-img stay-top">
       	
         <angucomplete-alt id="d"
-              placeholder="Destination"
-              pause="400"
+              placeholder="Direction"
+              pause="100"
               selected-object="directionSelected"
               remote-url="/data/directions"
               remote-url-request-formatter="directionFormat"
@@ -41,14 +43,16 @@
               input-changed="resetDirection"
               disable-input="inputDirection"
               input-class="form-control form-control-small"
-              />
+							auto-match="true"
+							match-class="highlight"
+							/>
       </label>
       <label class="item  item-input  item-icon-left">
-      	<img src="img/ic_station.png">
+      	<img src="img/ic_station.png" class="small-img stay-top">
       	
         <angucomplete-alt id="s"
               placeholder="Station"
-              pause="400"
+              pause="100"
               selected-object="stationSelected"
               remote-url="/data/stations"
               remote-url-request-formatter="stationFormat"
@@ -58,7 +62,9 @@
               text-searching="Recherche de stations ..."
               input-changed="resetStation"
               disable-input="inputStation"
-              input-class="form-control form-control-small"
+							input-class="form-control form-control-small"
+							auto-match="true"
+							match-class="highlight"
               />
       </label>
     </div>  
