@@ -1,21 +1,21 @@
-<ion-view view-title="Choose your itinerary" ng-controller="homeCtrl">
+<ion-view view-title="Choose your itinerary" ng-controller="homeCtrl" style="background: url(img/login.jpg) center; background-size: cover;">
 	<ion-header-bar align-title="center" class="bar-positive">
 		<img src="img/logo.png">
 		<h1 class="title">Comfort Train</h1>
 	</ion-header-bar>
 
   <ion-content class="padding">
-		<img class="centered" src="img/ic_home_logo.png" alt="Comfort Train" height="140"/>
-		<div class="list">
+		<img class="centered" src="img/logo.png" alt="Comfort Train" height="140"/>
+		<div focus class="list">
 
       <label class="item  item-input  item-icon-left">
       	<img src="img/ic_line.png" class="small-img stay-top">
  
       	<angucomplete-alt id="l"
-              placeholder="Ligne"
+              placeholder="Choisir une ligne"
               pause="100"
               selected-object="lineSelected"
-              remote-url="/data/lines?q="
+              remote-url="http://52.41.157.4:8080/data/lines?q="
               remote-url-data-field="results"
               title-field="name"
               image-field="img"
@@ -31,10 +31,10 @@
       	<img src="img/ic_direction.png" class="small-img stay-top">
       	
         <angucomplete-alt id="d"
-              placeholder="Direction"
+              placeholder="Choisir une direction"
               pause="100"
               selected-object="directionSelected"
-              remote-url="/data/directions"
+              remote-url="http://52.41.157.4:8080/data/directions"
               remote-url-request-formatter="directionFormat"
               remote-url-data-field="results"
               title-field="name"
@@ -51,10 +51,10 @@
       	<img src="img/ic_station.png" class="small-img stay-top">
       	
         <angucomplete-alt id="s"
-              placeholder="Station"
+              placeholder="Choisir un arrêt"
               pause="100"
               selected-object="stationSelected"
-              remote-url="/data/stations"
+              remote-url="http://52.41.157.4:8080/data/stations"
               remote-url-request-formatter="stationFormat"
               remote-url-data-field="results"
               title-field="name"
@@ -68,10 +68,20 @@
               />
       </label>
     </div>  
-    <a class="button button-block button-positive " ng-disabled="cantSearch" href="#/display">
-      <i class="icon ion-search"></i>
-      Chercher
-    </a>
-    	
+
+		<div>
+      <button ui-sref="display"  ng-disabled="cantSearch" class="button button-full button-positive"><span class="icon ion-search"></span>&nbsp;Chercher</button>
+    </div>
+
+		<div class="padding"></div>
+		
+		<div class="button-bar social-login">
+        <button class="button button-small button-border icon-left ion-social-google button-assertive">Google+</button>
+        <button class="button button-small button-border icon-left ion-social-twitter button-calm">Twitter</button>
+        <button class="button button-small button-border icon-left ion-social-facebook button-positive">Facebook</button>
+    </div>
+
+		<div class="padding"></div>
+		<div class="padding"></div>
   </ion-content>
 </ion-view> 

@@ -29,8 +29,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
         };
 		})
 		.factory('getDatasService', function($http) {
-				//				var serveur_ip = "http://52.41.157.4:8080";
-				var serveur_ip = ""; // à changer pour l'ip du serveur (ex celle du dessu) pour tester sur un device 
+				var serveur_ip = "http://52.41.157.4:8080";
+				//var serveur_ip = ""; // à changer pour l'ip du serveur (ex celle du dessu) pour tester sur un device 
 				return {
 						getLine: function(id) {
 								return $http.get(serveur_ip + "/data/lineGeometry?id=" + id);
@@ -248,6 +248,26 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						return {q:str, line:$scope.currentChoice.line.id};
 				}
 		})
+		.directive('focus', function() {
+				return {
+						restrict: 'A',
+						link: function($scope,elem,attrs) {
+								var get_next_id = {"l_value": "d_value", "d_value": "s_value"};
+								elem.bind('keydown', function(e) {
+										var code = e.keyCode || e.which;
+										if (code === 13) {
+												var current_id = e.srcElement.id;
+												if(current_id != "s_value") {
+														e.preventDefault();
+														document.getElementById(get_next_id[current_id]).focus();
+												} else {
+														location.href = "#/display";
+												}
+										}
+								});
+						}
+				}
+		})
     .controller('mapCtrl', function($scope, $interval, getDatasService, drawInformations, choice) {
     		$scope.currentChoice = choice;
 				var _TRAM = $scope.currentChoice.line.id;
@@ -276,18 +296,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						line_color = "#F58220";
 				} else if(/fléxo|flexo/i.test($scope.currentChoice.line.name)) { // if line is a flexo
 						line_color = "#008DD0";
-				} else if(/tram a|trama/i.test($scope.currentChoice.line.name)) { // if line is a flexo
+				} else if(/tram a|trama/i.test($scope.currentChoice.line.name)) { // if line is tram a
 						line_color = "#831F82";
 						line_number = "A";
-				} else if(/tram b|tramb/i.test($scope.currentChoice.line.name)) { // if line is a flexo
+				} else if(/tram b|tramb/i.test($scope.currentChoice.line.name)) { // if line is tram b
 						line_color = "#E50040";
 						line_number = "B";
-				} else if(/tram c|tramc/i.test($scope.currentChoice.line.name)) { // if line is a flexo
+				} else if(/tram c|tramc/i.test($scope.currentChoice.line.name)) { // if line is tram c
 						line_color = "#D35098";
 						line_number = "C";
 				}
 				
-        div.innerHTML = '<img style="vertical-align:middle" src="img/ic_line.png" class="small-img"> Ligne: <span>'+$scope.currentChoice.line.name+ '</span><span class="line-logo" style="background-color: '+line_color+'">'+line_number+'</span><br><img style="vertical-align:middle" src="img/ic_direction.png" class="small-img"> Direction: <span>'+$scope.currentChoice.direction.name+'</span><br><img style="vertical-align:middle" src="img/ic_station.png" class="small-img"> Station: <span>'+$scope.currentChoice.station.name+'</span>';
+        div.innerHTML = '<img style="vertical-align:middle" src="img/ic_line.png" class="smaller-img"> Ligne: <span>'+$scope.currentChoice.line.name+ '</span><span class="line-logo" style="background-color: '+line_color+'">'+line_number+'</span><br><img style="vertical-align:middle" src="img/ic_direction.png" class="smaller-img"> Direction: <span>'+$scope.currentChoice.direction.name+'</span><br><img style="vertical-align:middle" src="img/ic_station.png" class="smaller-img"> Station: <span>'+$scope.currentChoice.station.name+'</span>';
         legend.appendChild(div);
         map.controls[google.maps.ControlPosition.LEFT_TOP].push(legend);
 
@@ -407,7 +427,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 						var trainData = getTrainData(json);
 						var context = getContext(json);
 						createCars(trainData);
-						document.getElementById("loaderWrapper").style.display = 'none';
+						//document.getElementById("loaderWrapper").style.display = 'none';
 						document.getElementById("train-display").style.display = 'inline-flex';						
 				}
 
@@ -415,11 +435,11 @@ angular.module('starter', ['ionic', 'ngCordova', 'angucomplete-alt'])
 
 				var k = 0;
 				function updateView() {
-						document.getElementById("train-display").style.display = 'none';
-						document.getElementById("loaderWrapper").style.display = 'block';
-						$timeout(function() { httpGetAsync("datas_"+ (k%3) +".txt", drawInterface);}, 1500);
-
+						//document.getElementById("train-display").style.display = 'none';
+						//document.getElementById("loaderWrapper").style.display = 'block';
+						
 						k++;
+						httpGetAsync("datas_"+ (k%3) +".txt", drawInterface);
 				}
 				
 				

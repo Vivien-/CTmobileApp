@@ -18,7 +18,7 @@
 }
 
 .best {
-		animation: fade 1200ms infinite !important;
+/*		animation: fade 1200ms infinite !important;*/
 }
 
 #right {
@@ -40,10 +40,12 @@
 }
 
 .button-bar > .button {
-		margin-right: 2px !important;
 		border-radius: 0 !important;
 		width: 61px;
-		flex: initial !important;
+}
+
+.button-small {
+		line-height: 30px !important;
 }
 
 #left {
@@ -68,10 +70,13 @@
 }
 
 div span {
-		color: #4197BF;
 		position: relative;
 		width: 90%;
 		padding-top: 10px;
+}
+
+.highlight {
+		color: #4197BF;
 }
 
 #back-home {
@@ -193,21 +198,30 @@ img.centered {
 }
 
 #legend {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
     background: white;
     padding: 10px;
-    margin: 5px;
 		font-weight: 500;
 		font-size: 12px;
 }
 
+#legend:hover {
+		white-space: normal;
+}
 
 .item {
 		margin-bottom: 10px;
     margin-top: 10px;
 }
 
+ion-header-bar {
+		background: none;
+}
+
 .bar-positive {
-	background-color: #13719F !important;
+		background-color: #13719F !important;
 }
 .button-positive {
 	color: white;
@@ -249,6 +263,10 @@ h2 {
 
 .small-img {
 		height: 35px;
+}
+
+.smaller-img {
+    height: 25px;
 }
 
 .stay-top {
